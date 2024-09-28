@@ -61,9 +61,9 @@ public:
             if (num == target) {
                 return mid;//找到了
             } else if (num > target) {
-                right = mid - 1;
+                right = mid - 1;//说明在左半边
             } else {
-                left = mid + 1;
+                left = mid + 1;//说明在右半边，更新left
             }
         }
         return -1;//没找到
