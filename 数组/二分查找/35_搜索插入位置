@@ -1,0 +1,88 @@
+/*
+时间复杂度和空间复杂度是用于衡量算法性能的两个重要指标。
+
+时间复杂度
+时间复杂度描述了算法运行时间与输入数据量之间的关系。它通常用大O符号（O-notation）表示，例如 O(n)、O(n^2)、O(log n) 等。以下是常见的时间复杂度类别：
+
+常数时间 O(1): 执行时间不随输入规模变化，例如直接访问数组元素。
+对数时间 O(log n): 执行时间随输入规模增长的速度非常慢，例如二分查找。
+线性时间 O(n): 执行时间与输入规模成线性关系，例如遍历数组。
+线性对数时间 O(n log n): 通常出现在分治算法中，如快速排序的平均情况。
+二次时间 O(n^2): 执行时间与输入规模的平方成正比，例如冒泡排序。
+指数时间 O(2^n): 执行时间呈指数级增长，如递归计算斐波那契数列。
+空间复杂度
+空间复杂度描述了算法在执行过程中临时占用存储空间的大小。同样，它也用大O符号表示，例如 O(1)、O(n)、O(n^2) 等。以下是常见的空间复杂度类别：
+
+常数空间 O(1): 临时占用空间不随输入规模变化，例如交换两个变量的值。
+线性空间 O(n): 临时占用空间与输入规模成线性关系，例如存储输入数据的一个副本。
+二次空间 O(n^2): 临时占用空间与输入规模的平方成正比，这在一些算法中很少见。
+时间复杂度和空间复杂度的关系
+时间复杂度和空间复杂度通常是相互独立的，但有时可以通过牺牲一个来优化另一个。例如：
+
+空间换时间: 使用额外的存储空间来减少算法的运行时间。
+时间换空间: 使用更多的计算时间来减少算法所需的存储空间。
+在实际应用中，根据具体情况和资源限制来平衡时间复杂度和空间复杂度是非常重要的。在某些情况下，算法需要快速响应，可能更倾向于优化时间复杂度；而在其他情况下，如果内存资源有限，可能需要优化空间复杂度。
+*/
+
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        // 无重复元素，升序：二分法
+        // 时间复杂度为 O(log n)
+        // 的算法通常意味着算法的运行时间随着输入规模的增大而增长的速度非常慢。这类算法通常基于分而治之的策略，例如二分查找。
+        int left = 0;
+        int right = nums.size() - 1;
+        while (left <= right) {
+            //[left,right]左右都闭，所以left=right仍旧是有意义的
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] < target) { // tagert在由半边，更新left
+                left = mid + 1;
+            } else { // taget在左半边，更新right
+                right = mid - 1;
+            }
+        }
+        // 分别处理如下四种情况
+        // 目标值在数组所有元素之前  [0, -1]
+        // 目标值等于数组中某一个元素  return middle;
+        // 目标值插入数组中的位置 [left, right]，return  right + 1
+        // 目标值在数组所有元素之后的情况 [left, right]， 因为是右闭区间，所
+        // 以return right + 1
+        return right + 1;
+    }
+};
+https://leetcode.cn/problems/search-insert-position/
+
+//这个是左闭右开
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int n = nums.size();
+        int left = 0;
+        int right = n; // 定义target在左闭右开的区间里，[left, right)  target
+        while (left < right) { // 因为left == right的时候，在[left, right)是无效的空间
+            int middle = left + ((right - left) >> 1);
+            /*
+            (right - left) >> 1：对差值执行右移位操作。在大多数计算机系统中，右移一位相当于除以 2 并向下取整。
+            因此，这个操作实际上是在计算 (right - left) / 2。
+            在计算机科学中，右移一位操作通常是将一个数的二进制表示向右移动一位，并在左侧补零。这个操作相当于将数字除以2，并取整数部分。这是因为每个二进制位代表数字的一部分，右移一位就相当于将这个部分减少一半。
+例如，对于一个十进制数10，它的二进制表示是1010。如果我们将这个数右移一位，得到0101，这是10除以2向下取整的结果，即5。
+这个过程可以扩展到任何数。例如，对于二进制数1101，右移一位得到0110，这是13除以2向下取整的结果，即6。
+            */
+            if (nums[middle] > target) {
+                right = middle; // target 在左区间，在[left, middle)中
+            } else if (nums[middle] < target) {
+                left = middle + 1; // target 在右区间，在 [middle+1, right)中
+            } else { // nums[middle] == target
+                return middle; // 数组中找到目标值的情况，直接返回下标
+            }
+        }
+        // 分别处理如下四种情况
+        // 目标值在数组所有元素之前 [0,0)
+        // 目标值等于数组中某一个元素 return middle
+        // 目标值插入数组中的位置 [left, right) ，return right 即可
+        // 目标值在数组所有元素之后的情况 [left, right)，因为是右开区间，所以 return right
+        return right;
+    }
+};
