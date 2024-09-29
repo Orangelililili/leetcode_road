@@ -1,0 +1,80 @@
+https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/
+
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        // 非递减数组，复杂度为O（log(n))——>二分法,左右都闭
+        int leftBorder=getLeftBorder( nums,  target);
+        int rightBorder=getRightBorder( nums,  target);//调用的是具体的容器，编写要用它的地址
+
+        //情况一：数组里面没有target
+        if (leftBorder == -2 || rightBorder == -2) return {-1, -1};
+        // 情况三:在数组里面
+        if (rightBorder - leftBorder > 1) return {leftBorder + 1,rightBorder - 1};
+        // 情况二：target在数组范围内，但是没有target这个数字
+        return {-1, -1};
+
+    }
+    //不在public里面的默认都是private
+        //寻找左边界:target  [nums]
+    int getLeftBorder(vector<int>& nums, int target){
+        int leftBorder=-2;//记录一下左边界没有被找到的情况
+        int left = 0;
+        int right = nums.size() - 1;
+
+        while (left <= right) { // 因为左右都闭，所以左右相等是有意义的
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target) {
+                // 在右边，说明左边没有出现过target，那么第一次出现target的位置一定不在左边
+                left = mid + 1;
+            } else {
+                //在左边，或者相等，重点的找第一次出现的位置
+                right = mid -1;
+                leftBorder=right;
+            }
+        }
+        return leftBorder;//target在数组最左边的左边，找不到
+    }
+
+        //寻找右边界：[nums]  target
+    int getRightBorder(vector<int>& nums, int target){
+        int rightBorder=-2;//记录一下右边界没有被找到的情况
+        int left = 0;
+        int right = nums.size() - 1;
+        
+        while (left <= right) { // 因为左右都闭，所以左右相等是有意义的
+            int mid = left + (right - left) / 2;
+            if (nums[mid] > target) {
+                // 在左边
+                right = mid - 1;
+            } else  {
+                // 在右边，或者相等
+                left = mid + 1;
+                rightBorder = left;//只关注于最右边的target
+            } 
+        }
+        return rightBorder;//target在数组最右边的右边，找不到
+    }
+        
+};
+
+
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int n = nums.size();
+        int left = 0, right = n - 1;
+        // 找到目标值的一个位置
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target) left = mid + 1;
+            else right = mid;
+        }
+        if (left == n || nums[left]!= target) return {-1, -1};
+        // 从找到的第一个位置向左右扩展（这个位置可以是目标数组的任意一个）
+        int start = left, end = left;
+        while (start >= 0 && nums[start] == target) start--;
+        while (end < n && nums[end] == target) end++;
+        return {start + 1, end - 1};
+    }
+};
