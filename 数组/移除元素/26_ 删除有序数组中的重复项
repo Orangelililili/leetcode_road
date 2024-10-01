@@ -1,0 +1,19 @@
+https://leetcode.cn/problems/remove-duplicates-from-sorted-array/description/
+
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        //还是双指针法
+        int slow=1;//新数组下标
+        for(int fast=0;fast<nums.size()-1;fast++){
+            //fast是寻找新数组元素
+            if(nums[fast]!=nums[fast+1]){//nums[fast]!=nums[fast+1]不对，因为最后一个元素没法比较
+                //严格非递增排列
+                //不重复
+                nums[slow]=nums[fast+1];
+                slow++;
+            }
+        }
+        return slow;
+    }
+};
