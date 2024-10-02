@@ -1,0 +1,21 @@
+https://leetcode.cn/problems/move-zeroes/description/
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        //遍历元素，还得是双指针
+        int slow=0;
+        for(int fast=0;fast<nums.size();fast++){
+            if(nums[fast]!=0){
+                //找到不为0元素
+                nums[slow]=nums[fast];
+                slow++;
+            }//等于0的元素咋办  
+        }
+        while(slow<nums.size()){
+            nums[slow]=0;
+            slow++;
+        }
+    }
+};
+
