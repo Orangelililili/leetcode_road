@@ -4,10 +4,10 @@ class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
         //还是双指针法
-        int slow=1;//新数组下标
-        for(int fast=0;fast<nums.size()-1;fast++){
+        int slow=1;//新数组下标。不用从0开始，因为第一个元素肯定不会重复
+        for(int fast=0;fast<nums.size()-1;fast++){//没有等于，因为遍历到倒数第二个元素就行
             //fast是寻找新数组元素
-            if(nums[fast]!=nums[fast+1]){//nums[fast]!=nums[fast+1]不对，因为最后一个元素没法比较
+            if(nums[fast]!=nums[fast+1]){
                 //严格非递增排列
                 //不重复
                 nums[slow]=nums[fast+1];
