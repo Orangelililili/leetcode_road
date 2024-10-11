@@ -1,0 +1,28 @@
+https://leetcode.cn/problems/minimum-size-subarray-sum/
+
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        // 从第一个元素开始遍历，当整个数组求和之后仍旧达不到target，就返回0
+        //滑动窗口本质还是双指针
+        int i = 0;                // 滑动窗口的起始位置
+        int sum = 0;              // 和target判断
+        int result = INT32_MAX;// 是定义在 <limits.h> 或 <cstdint> 头文件中的一个宏，
+        //它代表了32位有符号整数（int32_t）能表示的最大值。
+        //具体来说，INT32_MAX 的值为 2^31 - 1，即 2147483647;
+         // 结果·首先定义最大，然后更新缩小
+        int subL=0;//滑动窗口长度
+        for (int j = 0; j < nums.size(); j++) { // 滑动窗口的终止位置j
+            sum += nums[j];
+            while (sum >= target) {
+                // 比如target是100，数组是1，1，1，1，1，100
+                // 那么sum一开始是105，要将起始位置向前移动
+                subL = j - i + 1;
+                result = result > subL ? subL : result; // 更新result
+                sum -= nums[i];
+                i++;
+            }            
+        }
+        return result==INT32_MAX? 0:result;//没更新就返回0，主要的定义一个不可能达到的最大值，判断是否有过更新 
+    }
+};
