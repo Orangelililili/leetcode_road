@@ -1,0 +1,46 @@
+https://leetcode.cn/problems/spiral-matrix-ii/description/
+
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        //循环不变量就是每次操作的方法一样
+        //对每一行都是左闭右开
+        vector<vector<int>> vec(n,vector<int>(n));
+        int startx=0,starty=0;//初始位置
+        int offset=1;//每一圈都要向内缩小，相当于一个退格
+        int count=1;//从1到n
+        int cir=n/2;
+        int i,j;
+        int mid=n/2;//中间
+
+        while(cir--){//判断转的圈数
+            i=startx;
+            j=starty;
+            for(;j<n-offset;j++){
+                //第一行
+                vec[i][j]=count++;
+            }
+            for(;i<n-offset;i++){
+                //最后一列，此时j指向的是最后一列
+                vec[i][j]=count++;
+            }
+            for(;j>startx;j--){
+                //省略初始赋值
+                //最后一行
+                vec[i][j]=count++;
+            }
+            for(;i>starty;i--){
+                //第一一列
+                vec[i][j]=count++;
+            }
+            startx++,starty++;//从（0，0）变成（1，1）
+            offset++;//退格也向内增加
+            
+        }
+        if(n%2){
+            //如果n是奇数，再对最中间的值进行赋值
+            vec[mid][mid]=count++;
+        }
+        return vec;
+    }
+};
