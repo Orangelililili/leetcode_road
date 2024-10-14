@@ -1,0 +1,133 @@
+https://leetcode.cn/problems/spiral-matrix/description/
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> ans;
+        int i, j; // 坐标点
+        int offset = 1;
+        int startx = 0, starty = 0;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int loop = 0;
+        int sumLoop = min(m, n);
+
+        if (matrix.size() == 1 ) {
+            //单行
+            ans=matrix[0];
+            return ans;
+        }
+        if (matrix[0].size() == 1 ) {
+            //单列
+            for(int k=0;k<matrix.size();k++){
+                ans.push_back(matrix[k][0]);
+            }
+            return ans;
+        }
+        // 依旧以左闭右开为循环不变量
+        while (loop < sumLoop / 2) {
+            // m*n停止条件
+            i = startx;
+            j = starty;
+            for (; j < matrix[i].size() - offset; j++) {
+                // 第一行
+                ans.push_back(matrix[i][j]);
+            }
+
+            for (; i < matrix.size() - offset; i++) {
+                // 最后一列
+                ans.push_back(matrix[i][j]);
+            }
+
+            for (; j > starty; j--) {
+                // 最后一行
+                ans.push_back(matrix[i][j]);
+            }
+
+            for (; i > startx; i--) {
+                // 第一列
+                ans.push_back(matrix[i][j]);
+            }
+
+            startx++, starty++;
+            offset++;
+            loop++;
+        }
+        // 处理循环之后剩余的单行或单列；
+        if (sumLoop % 2 == 1 && sumLoop == m) { // 有个单行
+            for (int jj = starty; jj < n - offset + 1; jj++) {
+                ans.push_back(matrix[i + 1][jj]);
+            }
+        } else if (sumLoop % 2 == 1 && sumLoop == n) { // 有个单列
+            for (int ii = startx; ii < m - offset + 1; ii++) {
+                ans.push_back(matrix[ii][j + 1]);
+            }
+        }
+        return ans;
+    }
+};class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> ans;
+        int i, j; // 坐标点
+        int offset = 1;
+        int startx = 0, starty = 0;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int loop = 0;
+        int sumLoop = min(m, n);
+
+        if (matrix.size() == 1 ) {
+            //单行
+            ans=matrix[0];
+            return ans;
+        }
+        if (matrix[0].size() == 1 ) {
+            //单列
+            for(int k=0;k<matrix.size();k++){
+                ans.push_back(matrix[k][0]);
+            }
+            return ans;
+        }
+        // 依旧以左闭右开为循环不变量
+        while (loop < sumLoop / 2) {
+            // m*n停止条件
+            i = startx;
+            j = starty;
+            for (; j < matrix[i].size() - offset; j++) {
+                // 第一行
+                ans.push_back(matrix[i][j]);
+            }
+
+            for (; i < matrix.size() - offset; i++) {
+                // 最后一列
+                ans.push_back(matrix[i][j]);
+            }
+
+            for (; j > starty; j--) {
+                // 最后一行
+                ans.push_back(matrix[i][j]);
+            }
+
+            for (; i > startx; i--) {
+                // 第一列
+                ans.push_back(matrix[i][j]);
+            }
+
+            startx++, starty++;
+            offset++;
+            loop++;
+        }
+        // 处理循环之后剩余的单行或单列；
+        if (sumLoop % 2 == 1 && sumLoop == m) { // 有个单行
+            for (int jj = starty; jj < n - offset + 1; jj++) {
+                ans.push_back(matrix[i + 1][jj]);
+            }
+        } else if (sumLoop % 2 == 1 && sumLoop == n) { // 有个单列
+            for (int ii = startx; ii < m - offset + 1; ii++) {
+                ans.push_back(matrix[ii][j + 1]);
+            }
+        }
+        return ans;
+    }
+};
