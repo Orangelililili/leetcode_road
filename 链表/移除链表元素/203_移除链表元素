@@ -1,0 +1,42 @@
+https://leetcode.cn/problems/remove-linked-list-elements/description/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}//这是类的默认构造函数。它不接受任何参数，并将成员变量 val 初始化为 0，
+                                    //将 next 初始化为 nullptr（在 C++11 中，nullptr 是一个空指针字面量，用来代替 NULL）。
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}//这是类的第三个构造函数，它接受两个参数：
+                //一个整数 x 和一个指向 ListNode 的指针 next。这个构造函数将成员变量 val 初始化为 x，将 next 初始化为传入的指针。
+ * };
+ */
+ //处理链表时，统一采用虚拟头节点dummyhead，这样不论是处理头节点还是中间节点，方法都一样
+ //不用分类处理
+ //因为是单向链表，所以不能根据当前节点找到上一个节点，所以操作的节点始终都是cur->next
+
+ //链表初始化： // 创建链表: 1 -> 2 -> 3
+    // ListNode* head = new ListNode(1);
+    // head->next = new ListNode(2);
+    // head->next->next = new ListNode(3);
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode* dummyHead = new ListNode(0); // 设置一个虚拟头结点
+        dummyHead->next = head; // 将虚拟头结点指向head，这样方便后面做删除操作
+        ListNode* cur = dummyHead;
+        while (cur->next != NULL) {//删的当前节点是存在的，不为空
+            if(cur->next->val == val) {
+                //ListNode* tmp = cur->next;
+                cur->next = cur->next->next;
+                //delete tmp;
+            } else {
+                cur = cur->next;//遍历下一个节点
+            }
+        }
+        head = dummyHead->next;
+        delete dummyHead;//new出来别忘了删
+        return head;
+    }
+};
