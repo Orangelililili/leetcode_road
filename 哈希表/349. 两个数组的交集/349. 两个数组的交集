@@ -1,0 +1,56 @@
+https://leetcode.cn/problems/intersection-of-two-arrays/description/
+
+//找一个数是否在某个集合中出现过，第一反应是哈希表
+//数组，set，map使用区别
+//数过大用数组就不太合适，或者【0，5，100000000】这种哈希值比较少、特别分散、跨度非常大，使用数组就造成空间的极大浪费，适合用set
+//set又有三种set,unordered_set,multiset
+//unordered_set效率最高（它以数组方式查询，其他是以树结构查询
+//而且它还是不可以重复的，直接帮我们去重
+
+//数组的方法：
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> result;//不管使用数组方法还是集合方法，这样定义可以帮助结果去重
+        int arr[1001]={0};//全为0（1001因为数值是从0到1000一共1001个数值）
+
+        for(int i=0;i<nums1.size();i++){
+            //记录第一个数组出现的数
+            arr[nums1[i]]++;
+        }
+
+        for(int j=0;j<nums2.size();j++){
+            //第二个数组对比第一个数组
+            if(arr[nums2[j]]!=0){
+                result.insert(nums2[j]);
+            }
+        }
+
+        return vector<int>(result.begin(), result.end());;//使用vector将unordered_set变成vector<int>
+    }
+};
+
+//set方法
+//直接使用set 不仅占用空间比数组大，而且速度要比数组慢，set把数值映射到key上都要做hash计算的
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> result_set;
+        unordered_set<int> nums_set(nums1.begin(),nums1.end());
+
+        for(int num:nums2){
+            //遍历nums2
+            if(nums_set.find(num)!=nums_set.end()){
+                //nums_set.find(num)：这个方法在集合（或其他关联容器，如std::set或std::unordered_set）中查找num。
+                //如果找到，它返回指向该元素的迭代器；如果找不到，它返回指向end()的迭代器，表示查找失败。
+                //nums_set.end()：end()返回一个指向容器末尾的迭代器（注意：这个迭代器并不指向有效元素，而是指向容器尾部的一个标志）。
+                //find(num) != end()：这表示如果找到num，find()返回的迭代器不会等于end()，
+                //意味着元素存在于集合中。如果相等，则表示该元素不存在。
+                //发现数组2的元素在nums_set出现过
+                result_set.insert(num);
+            }
+        }
+
+        return vector<int>(result_set.begin(),result_set.end());
+    }
+};
