@@ -1,0 +1,35 @@
+https://leetcode.cn/problems/4sum-ii/description/
+
+class Solution {
+public:
+    int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
+        //要记录有某个元素出现，无所谓顺序
+        //要知道元素和下标：unordered_map
+        //首先遍历前两个数组，把出现的和放进去
+        unordered_map<int,int> umap;
+        for(int a:nums1){//这种循环会自动遍历容器 nums1 中的每个元素，a 会依次取到 nums1 中的每个值
+            for(int b:nums2){
+                umap[a+b]++;//unordered_map 在存储数据时并不会“主动去重”，但它会自动处理重复键的情况。
+                            //具体来说，当试图插入一个已经存在的键时，unordered_map 会更新该键的值，而不是创建一个新的条目
+// 当 a = 1 和 b = 3 时：
+// 计算 1 + 3 = 4，此时 umap 中还没有键 4，所以 umap[4] 被初始化为 0，然后加 1，得到 umap[4] = 1。
+// 当 a = 1 和 b = 4 时：
+// 计算 1 + 4 = 5，umap 中没有键 5，因此 umap[5] 被初始化为 0，然后加 1，得到 umap[5] = 1。
+// 当 a = 2 和 b = 3 时：
+// 计算 2 + 3 = 5，此时 umap 中已经有键 5，所以 umap[5]++ 会将其值更新为 2，得到 umap[5] = 2。
+// 当 a = 2 和 b = 4 时：
+// 计算 2 + 4 = 6，umap 中没有键 6，因此 umap[6] 被初始化为 0，然后加 1，得到 umap[6] = 1。
+            }
+        }
+
+        int count=0;
+        for(int c:nums3){
+            for(int d:nums4){
+                if(umap.find(-(c+d))!=umap.end()){
+                    count += umap[0 - (c + d)];
+                }
+            }
+        }
+        return count;
+    }
+};
