@@ -1,0 +1,27 @@
+https://leetcode.cn/problems/ransom-note/description/
+
+//使用map的空间消耗要比数组大一些的，因为map要维护红黑树或者哈希表，
+//而且还要做哈希函数，是费时的！数据量大的话就能体现出来差别了。 所以数组更加简单直接有效！
+class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) {
+        //unordered_set<string> uset;//magazine有重复，unordered_set不能重复
+        //又是单映射，map不合适，数组最好
+        int hash[26]={0};
+        for(int i=0;i<magazine.length();i++){
+            hash[magazine[i]-'a']++;
+        }
+
+        for(int j=0;j<ransomNote.length();j++){
+            hash[ransomNote[j]-'a']--;
+        }
+
+        for(int k;k<26;k++){
+            if(hash[k]<0){
+                return false;
+            }
+        }
+
+        return true;
+    }
+};
