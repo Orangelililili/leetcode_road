@@ -1,0 +1,40 @@
+https://kamacoder.com/problempage.php?pid=1064
+
+#include<iostream>
+using namespace std;
+
+int main(void){
+    //很多数组填充类的问题，其做法都是先预先给数组扩容带填充后
+    //的大小，然后在从后向前进行操作。
+    string s;
+    
+    while(cin>>s){
+        int s_end=s.size()-1;
+        int count =0;//统计数字个数
+        for(int i=0;i<s.size();i++){
+            if(s[i]>='1'&&s[i]<='9'){
+                count++;
+            }
+        }
+        
+        // 扩充字符串s的大小，也就是将每个数字替换成"number"之后的大
+        s.resize(s.size() + count * 5);//数字也占一个位
+        int s_new_end=s.size()-1;
+        //填充
+        // 从后往前将数字替换为"number"
+        while(s_end>=0){
+           if( s[s_end] >= '0' && s[s_end] <= '9'){
+               s[s_new_end--]='r';
+               s[s_new_end--]='e';
+               s[s_new_end--]='b';
+               s[s_new_end--]='m';
+               s[s_new_end--]='u';
+               s[s_new_end--]='n';
+           }else{
+               s[s_new_end--]=s[s_end];
+           }
+           s_end--;
+        }
+        cout << s << endl;  
+    }
+}
