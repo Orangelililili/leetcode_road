@@ -1,0 +1,26 @@
+https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string/description/
+
+class Solution {
+public:
+    string removeDuplicates(string s) {
+        stack<char> s_stack;
+        
+        //遍历s
+        for (char i : s) {
+            if (s_stack.empty() || i != s_stack.top()) {
+                s_stack.push(i);
+            } else {
+                s_stack.pop(); // i 与 s_stack.top()相等的情况
+            }
+        }
+
+        //反转输出栈
+        string result = "";
+        while (!s_stack.empty()) { // 将栈中元素放到result字符串汇总
+            result += s_stack.top();
+            s_stack.pop();
+        }
+        reverse (result.begin(), result.end()); // 此时字符串需要反转一下
+        return result;
+    }
+};
