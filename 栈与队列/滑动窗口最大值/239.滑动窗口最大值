@@ -1,0 +1,49 @@
+https://leetcode.cn/problems/sliding-window-maximum/description/
+
+//这是使用单调队列的经典题目。
+class Solution {
+    ////这种结构称为嵌套类。嵌套类的优点是可以将辅助类的作用域限制在封闭类内，从而实现更好的封装和逻辑分离
+    class MyQueue { //单调队列（从大到小）
+    public:
+        deque<int> que; // 使用deque来实现单调队列
+        // 每次弹出的时候，比较当前要弹出的数值是否等于队列出口元素的数值，如果相等则弹出。
+        // 同时pop之前判断队列当前是否为空。
+        void pop(int value) {
+            if (!que.empty() && value == que.front()) {
+                que.pop_front();
+            }
+        }
+        // 如果push的数值大于入口元素的数值，那么就将队列后端的数值弹出，直到push的数值小于等于队列入口元素的数值为止。
+        // 这样就保持了队列里的数值是单调从大到小的了。
+        void push(int value) {
+            while (!que.empty() && value > que.back()) {
+                que.pop_back();
+            }
+            que.push_back(value);
+
+        }
+        // 查询当前队列里的最大值 直接返回队列前端也就是front就可以了。
+        int front() {
+            return que.front();
+        }
+    };
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        //其实队列没有必要维护窗口里的所有元素，只需要维护有可能成为窗口里最大值的元素就可以了，同时保证队列里的元素数值是由大到小的。
+        //queue在没有指定容器的情况下，deque就是默认底层容器，
+        //单调队列使用deque最为合适
+        //C++中deque是stack和queue默认的底层实现容器，deque是可以两边扩展的，而且deque里元素并不是严格的连续分布的
+        MyQueue que;
+        vector<int> result;
+        for (int i = 0; i < k; i++) { // 先将前k的元素放进队列
+            que.push(nums[i]);
+        }
+        result.push_back(que.front()); // result 记录前k的元素的最大值
+        for (int i = k; i < nums.size(); i++) {
+            que.pop(nums[i - k]); // 滑动窗口移除最前面元素
+            que.push(nums[i]); // 滑动窗口前加入最后面的元素
+            result.push_back(que.front()); // 记录对应的最大值
+        }
+        return result;
+    }
+};
