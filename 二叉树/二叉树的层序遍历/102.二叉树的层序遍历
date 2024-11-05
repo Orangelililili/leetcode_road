@@ -1,0 +1,60 @@
+https://leetcode.cn/problems/binary-tree-level-order-traversal/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ //递归
+class Solution {
+public:
+    void Order(TreeNode* cur,vector<vector<int>>&result,int depth){//注意要用引用
+            //要不然每次递归调用时都会创建一个 result 的副本，而不是修改原始的 result，这样会导致修改没有保留
+        if(cur==nullptr){
+            return;//返回条件
+        }
+        if(result.size() == depth){//深度增加每次增加一个vector，玄学
+            result.push_back(vector<int>());//添加里面的vector
+        }
+        result[depth].push_back(cur->val);//添加元素
+        Order(cur->left,result,depth+1);//左右遍历
+        Order(cur->right,result,depth+1);
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        int depth=0;
+        Order(root,result,depth);
+        return result;
+    }
+};
+
+//迭代法
+
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        queue<TreeNode*> que;
+        if (root != NULL) que.push(root);
+        vector<vector<int>> result;
+        while (!que.empty()) {
+            int size = que.size();
+            vector<int> vec;
+            // 这里一定要使用固定大小size，不要使用que.size()，因为que.size是不断变化的
+            for (int i = 0; i < size; i++) {
+                TreeNode* node = que.front();
+                que.pop();
+                vec.push_back(node->val);
+                if (node->left) que.push(node->left);
+                if (node->right) que.push(node->right);
+            }
+            result.push_back(vec);
+        }
+        return result;
+    }
+};
