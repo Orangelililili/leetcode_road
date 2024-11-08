@@ -1,0 +1,42 @@
+https://leetcode.cn/problems/minimum-depth-of-binary-tree/submissions/579061702/
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ //层序遍历，第一次找到没有子节点的节点就是最小深度
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (!root) return 0;  // 空树深度为 0
+
+        int min_depth = 1;
+        queue<TreeNode*> que;
+        que.push(root);
+
+        while (!que.empty()) {
+            int size = que.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode* node = que.front();
+                que.pop();
+
+                // 遇到第一个叶节点时，直接返回当前深度
+                if (!node->left && !node->right) return min_depth;
+
+                if (node->left) que.push(node->left);
+                if (node->right) que.push(node->right);
+            }
+            min_depth++;  // 完成一层后深度加 1
+        }
+        
+        return min_depth;
+    }
+};
