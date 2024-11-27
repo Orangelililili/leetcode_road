@@ -1,0 +1,34 @@
+https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/submissions/583435728/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ //如果两个节点在不同层，且在不同子树，则公共节点就是在上面内层的父节点
+ //            同层   ，而且是二叉树，那么公共节点就是他们的父节点
+ //            不同层 ，同一个子树，，              上面的节点
+class Solution {
+public://寻找父节点，要自底而上回溯，后序遍历就很好（左右中）
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root==p ||root==q||root==NULL) return root;
+        //如果当前节点是 p 或 q，意味着我们找到了其中一个节点，直接返回它作为潜在的 LCA。
+        //如果当前节点为 NULL，说明到达了一个空子树，不能继续向下查找，返回 NULL。
+        TreeNode* left=lowestCommonAncestor(root->left,p,q);
+        TreeNode* right=lowestCommonAncestor(root->right,p,q);
+        //递归左右子树
+        //开始处理
+        if (left != NULL && right != NULL) return root;//说明 p 和 q 分别位于当前节点 root 的左右子树中。这意味着当前节点 root 就是它们的最近公共祖先
+        if(left!=NULL &&right==NULL) return left;
+        if(left==NULL && right!=NULL) return right;//如果 left 为 NULL，说明 p 和 q 都不在左子树中。此时返回右子树的结果 right，因为 p 或 q 必定在右子树中。
+        else  { //  (left == NULL && right == NULL)
+            return NULL;//表示在当前子树中没有找到 p 或 q
+        }
+
+
+    }
+};
