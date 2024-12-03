@@ -1,0 +1,20 @@
+https://leetcode.cn/problems/convert-bst-to-greater-tree/description/
+
+ //从树中可以看出累加的顺序是右中左，所以我们需要反中序遍历这个二叉树，然后顺序累加就可以了。
+class Solution {
+private:
+    int pre;//记录前一个节点的值
+    void traversal(TreeNode* cur){
+        if (cur == NULL) return ;//返回
+        traversal(cur->right);//直接遍历到最右下的节点
+        cur->val+=pre;
+        pre=cur->val;
+        traversal(cur->left);
+    }
+public:
+    TreeNode* convertBST(TreeNode* root) {
+        pre=0;
+        traversal(root);
+        return root;
+    }
+};
