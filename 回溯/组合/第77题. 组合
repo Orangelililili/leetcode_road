@@ -1,5 +1,5 @@
 https://leetcode.cn/problems/combinations/
-
+for循环横向遍历，递归纵向遍历，回溯不断调整结果集。
 //把递归与回溯想象成一棵树去处理
 // void backtracking(参数) {
 //     if (终止条件) {
