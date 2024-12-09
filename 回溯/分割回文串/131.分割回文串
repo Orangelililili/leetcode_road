@@ -1,0 +1,49 @@
+https://leetcode.cn/problems/palindrome-partitioning/
+
+class Solution {
+private:
+    vector<vector<string>> result;  // 存储最终结果
+    vector<string> path;  // 存储当前回溯路径中的回文子串
+    
+    // 回溯函数
+    void backTracking(string s, int startIndex) {
+        // 当startIndex到达字符串末尾时，将当前路径加入结果
+        if (startIndex == s.size()) {
+            result.push_back(path);
+            return;
+        }
+        
+        for (int i = startIndex; i < s.size(); i++) {
+            // 检查s[startIndex...i]是否是回文
+            if (isPalindrome(s, startIndex, i)) {
+                // 若是回文，加入路径
+                string str = s.substr(startIndex, i - startIndex + 1);
+                path.push_back(str);
+                // 递归调用，尝试下一个子串
+                backTracking(s, i + 1);
+                // 回溯，移除最后加入的回文子串
+                path.pop_back();
+            }
+        }
+    }
+
+    // 检查给定的子串是否为回文
+    bool isPalindrome(const string& s, int start, int end) {
+        while (start < end) {
+            if (s[start] != s[end]) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
+
+public:
+    vector<vector<string>> partition(string s) {
+        result.clear();
+        path.clear();
+        backTracking(s, 0);  // 从索引0开始回溯
+        return result;
+    }
+};
