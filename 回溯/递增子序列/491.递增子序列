@@ -1,0 +1,32 @@
+https://leetcode.cn/problems/non-decreasing-subsequences/
+
+class Solution {
+private:
+    vector<vector<int>> result ;
+    vector<int> path;
+    void backtracking(vector<int>& nums, int startIndex) {
+        //退出条件
+        if(path.size()>1){
+            result.push_back(path);
+        }
+        int used[201]={0};
+        for (int i = startIndex; i < nums.size(); i++) {
+            if ((!path.empty() && nums[i] < path.back())
+                    || used[nums[i] + 100] == 1) {//确保递增，即当前数字 nums[i] 必须大于等于子序列 path 中的最后一个数字。
+                    continue;//避免在同一层递归中重复使用相同的元素。通过 used 数组标记每个元素是否已经使用过。
+                    //这里 nums[i] + 100 是为了处理负数元素的情况，确保 used 数组能够覆盖负数索引
+            }
+            used[nums[i] + 100] = 1; // 记录这个元素在本层用过了，本层后面不能再用了
+            path.push_back(nums[i]);
+            backtracking(nums, i + 1);
+            path.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        result.clear();
+        path.clear();
+        backtracking(nums,0);
+        return result;
+    }
+};
