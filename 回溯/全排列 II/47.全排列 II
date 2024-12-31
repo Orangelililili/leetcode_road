@@ -35,3 +35,38 @@ public:
         return result;
     }
 };
+//使用set去重
+class Solution {
+private:
+    vector<vector<int>> result;
+    vector<int> path;
+    void backtracking (vector<int>& nums, vector<bool>& used) {
+        if (path.size() == nums.size()) {
+            result.push_back(path);
+            return;
+        }
+        unordered_set<int> uset; // 控制某一节点下的同一层元素不能重复
+        for (int i = 0; i < nums.size(); i++) {
+            if (uset.find(nums[i]) != uset.end()) {
+                continue;
+            }
+            if (used[i] == false) {
+                uset.insert(nums[i]); // 记录元素
+                used[i] = true;
+                path.push_back(nums[i]);
+                backtracking(nums, used);
+                path.pop_back();
+                used[i] = false;
+            }
+        }
+    }
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        result.clear();
+        path.clear();
+        sort(nums.begin(), nums.end()); // 排序
+        vector<bool> used(nums.size(), false);
+        backtracking(nums, used);
+        return result;
+    }
+};
