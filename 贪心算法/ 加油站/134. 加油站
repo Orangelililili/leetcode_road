@@ -1,0 +1,20 @@
+https://leetcode.cn/problems/gas-station/description/
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int curSum = 0;      // 当前油量
+        int totalSum = 0;    // 总油量 - 总消耗油量
+        int start = 0;       // 起始加油站的下标
+        for (int i = 0; i < gas.size(); i++) {
+            curSum += gas[i] - cost[i];  // 累加从起点到当前加油站的油量差
+            totalSum += gas[i] - cost[i]; // 累加整个环的油量差
+            if (curSum < 0) {   // 当前油量不足以继续前进
+                start = i + 1;   // 起始位置更新为i+1
+                curSum = 0;      // 重置当前油量，从下一个加油站开始
+            }
+        }
+        if (totalSum < 0) return -1; // 总油量小于总消耗油量，返回 -1，说明无法完成一圈
+        return start;  // 返回能完成一圈的起始点
+    }
+};
