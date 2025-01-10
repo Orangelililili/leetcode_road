@@ -1,0 +1,33 @@
+https://leetcode.cn/problems/lemonade-change/description/
+
+class Solution {
+public:
+    bool lemonadeChange(vector<int>& bills) {
+        if (bills[0] != 5) return false;  // 第一个顾客若支付的不是 5 元，则直接返回 false
+
+        int five = 1;  // 初始化 5 元的数量，因为第一个顾客支付了 5 元
+        int ten = 0;   // 初始化 10 元的数量
+
+        for (int i = 1; i < bills.size(); i++) {  // 遍历每个顾客支付的钞票
+            if (bills[i] == 5) {
+                five++;  // 收到 5 元，直接增加 5 元的数量
+            } else if (bills[i] == 10) {
+                if (five == 0) return false;  // 如果没有 5 元找零，返回 false
+                five--;  // 找零 5 元
+                ten++;   // 收到 10 元
+            } else if (bills[i] == 20) {
+                // 优先使用 10 元和 5 元组合找零
+                if (ten > 0 && five > 0) {
+                    ten--;  // 找零 10 元
+                    five--; // 找零 5 元
+                } else if (five >= 3) {
+                    five -= 3;  // 找零 3 张 5 元
+                } else {
+                    return false;  // 无法找零，返回 false
+                }
+            }
+        }
+
+        return true;  // 所有顾客都能成功找零
+    }
+};
