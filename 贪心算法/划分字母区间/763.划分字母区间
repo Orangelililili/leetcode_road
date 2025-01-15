@@ -1,0 +1,36 @@
+https://leetcode.cn/problems/partition-labels/description/
+
+class Solution {
+public:
+    vector<int> partitionLabels(string s) {
+        vector<int> last(26, 0); // 记录每个字母的最后出现位置
+        vector<int> result;
+
+        // 记录每个字母的最后出现位置
+        for (int i = 0; i < s.size(); i++) {
+            last[s[i] - 'a'] = i;
+        }
+
+        int start = 0, end = 0; // 记录当前片段的起始和结束位置
+
+        // 遍历字符串，划分片段
+        for (int i = 0; i < s.size(); i++) {
+            end = max(end, last[s[i] - 'a']); // 更新片段结束位置，保证在该片段中没有最远下标比end大
+            if (i == end) { // 如果当前下标到达片段的结束位置
+                result.push_back(end - start + 1); // 计算片段长度
+                start = end + 1; // 更新起始位置
+            }
+        }
+
+        return result; // 返回所有片段的长度
+    }
+};
+
+/*
+记录每个字符最后一次出现的下标：
+使用一个数组或哈希表记录字符串中每个字符的最后一次出现位置。
+遍历字符串：
+在遍历的过程中记录当前片段的结束位置。如果当前下标到达这个片段的结束位置，说明这个片段已经划分完毕。
+记录片段长度：
+在划分出一个片段后，计算其长度并保存到结果列表中。
+*/
