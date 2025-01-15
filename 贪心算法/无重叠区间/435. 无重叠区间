@@ -1,0 +1,28 @@
+https://leetcode.cn/problems/non-overlapping-intervals/description/
+
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        // 1. 按照区间结束位置排序
+        sort(intervals.begin(), intervals.end(), [](const vector<int>& a, const vector<int>& b) {
+            return a[1] < b[1];//lambda 排序的依据是每个子向量（区间）的第二个元素（即区间的结束位置 a[1]）
+        });//比较函数返回 true 表示 a 应排在 b 之前，false 则表示 b 应排在 a 之前。
+        //a[1] < b[1]：如果 a 的结束位置小于 b 的结束位置，a 排在 b 之前。
+
+        int count = 0;  // 记录移除的区间数量
+        int end = intervals[0][1];  // 记录当前的区间结束位置
+
+        // 2. 遍历从第二个区间开始
+        for (int i = 1; i < intervals.size(); i++) {
+            if (intervals[i][0] < end) {
+                // 如果当前区间的开始小于前一个区间的结束，发生重叠
+                count++;
+            } else {
+                // 如果没有重叠，更新 `end` 为当前区间的结束
+                end = intervals[i][1];
+            }
+        }
+
+        return count;  // 返回需要移除的区间数量
+    }
+};
