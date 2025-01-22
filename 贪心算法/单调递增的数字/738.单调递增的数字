@@ -1,0 +1,28 @@
+https://leetcode.cn/problems/monotone-increasing-digits/
+
+class Solution {
+public:
+    int monotoneIncreasingDigits(int n) {
+        // 将整数转换为字符串，方便逐位操作
+        string strNum = to_string(n);
+        int size = strNum.size();  // 数字的长度
+        int flag = size;           // 标记需要改为 '9' 的起始位置
+
+        // 从后向前遍历字符串，检查单调性
+        for (int i = size - 1; i > 0; i--) {
+            // 如果前一位比当前位大，不满足单调递增
+            if (strNum[i - 1] > strNum[i]) {
+                strNum[i - 1]--;   // 前一位减 1
+                flag = i;          // 更新标记，记录从这里开始需要变成 '9'
+            }
+        }
+
+        // 从标记位置开始，将后面的数字全变为 '9'
+        for (int i = flag; i < size; i++) {
+            strNum[i] = '9';
+        }
+
+        // 将修改后的字符串转回整数返回
+        return stoi(strNum);
+    }
+};
