@@ -1,5 +1,12 @@
 https://leetcode.cn/problems/climbing-stairs/description/
 
+//动规的五部曲：
+
+//确定dp数组（dp table）以及下标的含义
+//确定递推公式
+//dp数组如何初始化
+//确定遍历顺序
+//举例推导dp数组
 
 class Solution {
 public:
