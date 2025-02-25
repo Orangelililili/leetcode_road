@@ -32,7 +32,9 @@ int main() {
             if (j < weight[i]) dp[i][j] = dp[i - 1][j]; // 如果装不下这个物品,那么就继承dp[i - 1][j]的值
             else {
                 dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
-            }
+            }//此时有两种选择：
+​//不装当前物品：最大价值为 dp[i - 1][j]（前 i - 1 个物品在容量 j 时的最大价值）。
+​//装当前物品：最大价值为 dp[i - 1][j - weight[i]] + value[i]（前 i - 1 个物品在容量 j - weight[i] 时的最大价值，加上当前物品的价值 value[i]）。
         }
     }
     cout << dp[n - 1][bagweight] << endl;
