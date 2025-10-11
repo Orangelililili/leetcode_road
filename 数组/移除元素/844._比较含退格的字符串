@@ -1,0 +1,107 @@
+https://leetcode.cn/problems/backspace-string-compare/description/
+
+class Solution {
+    //默认就是private
+    //用两次循环去遍历太蠢了，定义一个辅助函数
+    // //定义两个指针，一个去遍历元素。一个去存放新数组
+    //     int slow=0;
+    //     for(int fast=1;fast<s.size();fast++){
+    //         //找#
+    //         if (s[fast]!='#'){
+    //             s[slow]=s[fast-1];
+    //             slow++;
+    //         }
+    //     }
+        
+
+    //     int slow2=0;
+    //     for(int fast=1;fast<t.size();fast++){
+    //         //找#
+    //         if (t[fast]!='#'){
+    //             t[slow2]=t[fast-1];
+    //             slow2++;
+    //         }
+    //     }
+    //上述字符串操作也是有问题的，字符串在c++中是不可变的·
+    
+
+    string build(string s){
+        string result;
+        for(char ch:s){
+            //遍历
+            if(ch!='#'){
+                result.push_back(ch);
+            }else if(!result.empty()){//如果当前字符 ch 等于 #，则上述 if 条件判断为假，程序将跳过大括号内的 push_back 调用，并继续执行 else if 语句。
+                result.pop_back();
+                //else if (!result.empty()) { ... }：这是处理 # 字符的关键部分。如果 ch 是 # 并且 result 字符串不为空，则执行大括
+//号内的代码。这里，!result.empty() 检查 result 是否不为空。如果不为空，说明 result 中有字符可以删除。
+            }
+        }
+        return result;
+    }
+        
+        
+public:
+    bool backspaceCompare(string s, string t) {
+        return build(s)==build(t);
+    }
+
+};
+
+
+
+法二：
+
+class Solution {
+   
+public:
+    bool backspaceCompare(string s, string t) {
+        //方法二
+        //利用双指针，一个字符是否存储在新的数据当中只和后一个#有关
+        //正向遍历不方便，反向遍历
+        int fast1=s.length()-1,fast2=t.length()-1;
+        
+        int skipS=0,skipT=0;
+
+        while(fast1>=0||fast2>=0){
+            while (fast1 >= 0) {
+                if (s[fast1] == '#') {
+                    skipS++, fast1--;
+                } else if (skipS > 0) {
+                    //如果当前字符不是 #，但是 skipS 大于 0，这意味着之前遇到了 # 字符，现在需要跳过相应的非 # 字符。
+                    //skipS 自减 1，表示跳过了一个非 # 字符，fast1 自减 1，继续检查前一个字符。
+                    skipS--, fast1--;
+                } else {
+                    break;//可以使用当前字符
+                }
+            }
+
+            while (fast2 >= 0) {
+                if (t[fast2] == '#') {
+                    skipT++, fast2--;
+                } else if (skipT > 0) {
+                    skipT--, fast2--;
+                } else {
+                    break;//可以使用当前字符
+                }
+            }
+            //以上并不是对字符串进行处理，只是找到新字符串中数据位置
+
+            // 比较处理后的字符
+            if(fast1>=0&&fast2>=0){
+                if(s[fast1]!=t[fast2]){
+                    return false;
+                }
+            }else {
+                //如果一个字符串已经结束而另一个没有，它们不相等
+                if(fast1>=0||fast2>=0){
+                    return false;
+                }
+            }
+            // 移动到下一个字符
+            fast1--,fast2--;
+        }
+        //一样
+        return true;
+    }
+};

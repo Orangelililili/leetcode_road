@@ -1,0 +1,53 @@
+https://leetcode.cn/problems/implement-queue-using-stacks/description/
+
+//栈是先进后出，队列是先进先出
+//deque和quene
+
+class MyQueue {
+public:
+    stack<int> stIn;
+    stack<int> stOut;//用栈来模拟队列，要用两个栈来实现
+
+    MyQueue() {
+        //构造函数
+    }
+    
+    void push(int x) {
+        stIn.push(x);
+    }
+    
+    int pop() {
+        if(stOut.empty()){
+            //stOut=stIn;//不能直接赋值，栈内数据要反转之后，要不然输出不是先进先出了，这样不符合队列
+            while(!stIn.empty()){
+                //全给stIn，自身清零
+                //int temp=stIn.pop();//stIn.pop() 是一个 void 函数，不返回值，无法赋值给 temp
+                int temp = stIn.top(); // 获取 `stIn` 栈顶元素，top()：返回栈顶元素的引用，但不移除它
+                stIn.pop();             // 弹出 `stIn` 栈顶
+                stOut.push(temp);       // 将元素推入 `stOut`
+            }
+        }
+        int result = stOut.top(); 
+        stOut.pop();             
+        return result;       
+    }
+    
+    int peek() {
+        int res = this->pop(); // 直接使用已有的pop函数
+        stOut.push(res); // 因为pop函数弹出了元素res，所以再添加回去
+        return res;
+    }
+    
+    bool empty() {
+        return stIn.empty()&&stOut.empty();
+    }
+};
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue* obj = new MyQueue();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->peek();
+ * bool param_4 = obj->empty();
+ */

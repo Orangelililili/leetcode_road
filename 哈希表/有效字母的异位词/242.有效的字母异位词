@@ -1,0 +1,35 @@
+https://leetcode.cn/problems/valid-anagram/description/
+
+//哈希表都是用来快速判断一个元素是否出现集合里
+//哈希函数，哈希碰撞（拉链法和线性探测法）
+//常见的三种哈希结构：数组，set（集合），map（映射）
+//集合来解决哈希问题的时候，优先使用unordered_set，因为它的查询和增删效率是最优的，
+//如果需要集合是有序的，那么就用set，如果要求不仅有序还要有重复数据的话，那么就用multiset
+//当我们遇到了要快速判断一个元素是否出现集合里的时候，就要考虑哈希法。
+//但是哈希法也是牺牲了空间换取了时间，因为我们要使用额外的数组，set或者是map来存放数据，才能实现快速的查找。
+
+
+//字母异位词：就是比较两个字符串出现的字母和该字母出现的次数是否都相同，如果相同为true
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        int hash[26]={};//因为遍历的元素都是小写字母a-z，一共26个，而且ASCII码连续
+        //初值为0，这样遍历s和t就可以先++后--如果数组最后为0，那么就是true
+
+        for(int i=0;i<s.size();i++){
+            hash[s[i]-'a']++;//如果第一个元素是a，那么hash[0]从0变成1
+        }
+
+        for(int j=0;j<t.size();j++){
+            hash[t[j]-'a']--;//如果第二个字符串也出现了比如说字母a，第一个字符串将hash[0]置1，它再给改成0
+        }
+        
+        //最后看hash是否为全0
+        for(int k=0;k<26;k++){
+            if(hash[k]!=0){
+                return false;
+            }
+        }
+        return true;
+    }
+};

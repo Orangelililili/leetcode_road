@@ -1,0 +1,48 @@
+/**
+逆波兰表达式：
+逆波兰表达式是一种后缀表达式，所谓后缀就是指算符写在后面。
+平常使用的算式则是一种中缀表达式，如 ( 1 + 2 ) * ( 3 + 4 ) 。
+该算式的逆波兰表达式写法为 ( ( 1 2 + ) ( 3 4 + ) * ) 。
+逆波兰表达式主要有以下两个优点：
+去掉括号后表达式无歧义，上式即便写成 1 2 + 3 4 + * 也可以依据次序计算出正确结果。
+适合用栈操作运算：遇到数字则入栈；遇到算符则取出栈顶两个数字进行计算，并将结果压入栈中
+**/
+class Solution {
+public:
+    bool isNumber(const string& s) {
+        // 检查是否为整数
+        return !s.empty() && (isdigit(s[0]) || (s[0] == '-' && s.size() > 1)) &&
+               all_of(s.begin() + (s[0] == '-' ? 1 : 0), s.end(), ::isdigit);
+    }//如果输入标准，只有数字和加减乘除，就不用判断，不是运算符就是数字
+
+    int evalRPN(vector<string>& tokens) {
+        stack<int> i_stack;
+        
+        // 遍历 tokens
+        for (const string& token : tokens) {
+            if (isNumber(token)) {
+                // 将数字转为整数并压入栈
+                i_stack.push(stoi(token));
+            } else {
+                // 操作符处理
+                int b = i_stack.top();
+                i_stack.pop();
+                int a = i_stack.top();
+                i_stack.pop();
+
+                if (token == "+") {
+                    i_stack.push(a + b);
+                } else if (token == "-") {
+                    i_stack.push(a - b);
+                } else if (token == "*") {
+                    i_stack.push(a * b);
+                } else if (token == "/") {
+                    i_stack.push(a / b);
+                }
+            }
+        }
+
+        // 栈顶的结果即为最终答案
+        return i_stack.top();
+    }
+};

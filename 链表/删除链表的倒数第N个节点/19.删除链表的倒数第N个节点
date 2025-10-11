@@ -1,0 +1,35 @@
+https://leetcode.cn/problems/remove-nth-node-from-end-of-list/description/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+//我们要删的节点为i，则指针指向的是i-1个节点，这样可以使它直接指向第i+1个节点，从而完成删除工作
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+    ListNode* dummyHead=new ListNode(0);
+    dummyHead->next=head;
+    ListNode* fast=dummyHead;
+    ListNode* slow=dummyHead;
+    while(n-- && fast != NULL) {
+            fast = fast->next;
+        }
+    fast = fast->next; // fast再提前走一步，因为需要让slow指向删除节点的上一个节点
+    while (fast != NULL) {
+        fast = fast->next;
+        slow = slow->next;
+    }
+    slow->next = slow->next->next; 
+
+    return dummyHead->next;
+    }
+};
+//使用了一个 dummyHead 节点，这样做的目的是为了处理链表头节点被删除的情况。
+//当你需要删除链表中的第 n 个节点时，可能这个节点就是头节点，直接返回 head 会导致你失去对新头节点的引用。

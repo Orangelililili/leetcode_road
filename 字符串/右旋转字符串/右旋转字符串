@@ -1,0 +1,39 @@
+https://kamacoder.com/problempage.php?pid=1065
+
+//不能申请额外空间，只能在本串上操作
+#include <iostream>
+#include <string>
+using namespace std;
+void swapWord(string &s, int start, int end) {
+    while (start < end) {
+        swap(s[start], s[end]);
+        start++;
+        end--;
+    }
+}
+
+string right_k(int k, string &s) {
+    int n = s.size();
+    k = k % n;  // 处理 k 大于字符串长度的情况
+
+    // Step 1: 反转整个字符串
+    swapWord(s, 0, n - 1);
+
+    // Step 2: 反转前 k 个字符
+    swapWord(s, 0, k - 1);
+
+    // Step 3: 反转剩余部分
+    swapWord(s, k, n - 1);
+
+    return s;
+}
+
+int main() {
+    int k;
+    string s;
+    cin >> k;
+    cin >> s;
+
+    cout << right_k(k, s) << endl;
+    return 0;
+}

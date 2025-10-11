@@ -1,0 +1,18 @@
+https://leetcode.cn/problems/jump-game/description/
+
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int cover = 0;
+        if (nums.size() == 1) return true; // 只有一个元素，就是能达到
+        for (int i = 0; i <= cover; i++) { // 注意这里是小于等于cover
+            cover = max(i + nums[i], cover);
+            if (cover >= nums.size() - 1) return true; // 说明可以覆盖到终点了
+        }
+        return false;
+    }
+};
+//这个算法是基于 贪心策略 的，核心思想是始终更新当前能够跳跃到的最远位置，并且不断检查是否能够到达终点。
+//通过逐步更新 cover，可以高效地判断是否可以到达最后一个位置。
+//不在意到底跳几步
+//在意cover到底是多少

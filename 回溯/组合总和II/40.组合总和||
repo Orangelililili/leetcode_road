@@ -1,0 +1,42 @@
+https://leetcode.cn/problems/combination-sum-ii/description/
+
+class Solution {
+private:
+    vector<vector<int>> result;
+    vector<int> path;
+    
+    void backTracking(vector<int>& candidates, int target, int startIndex, int sum) {
+        if (sum == target) {
+            result.push_back(path);
+            return;
+        }
+        
+        for (int i = startIndex; i < candidates.size(); i++) {
+            // 跳过重复元素
+            if (i > startIndex && candidates[i] == candidates[i - 1]) continue;
+            
+            // 加入当前元素到路径中，并更新当前和
+            sum += candidates[i];
+            path.push_back(candidates[i]);
+            
+            // 递归：允许重复使用当前元素
+            backTracking(candidates, target, i + 1, sum);
+            
+            // 回溯：移除最后一个元素，并恢复当前和
+            sum -= candidates[i];
+            path.pop_back();
+        }
+    }
+
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        result.clear();
+        path.clear();
+        
+        // 对候选数组进行排序，以便处理重复元素
+        sort(candidates.begin(), candidates.end());
+        
+        backTracking(candidates, target, 0, 0);
+        return result;
+    }
+};

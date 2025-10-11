@@ -1,0 +1,57 @@
+https://leetcode.cn/problems/jump-game-ii/description/
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int n = nums.size();
+        if (n <= 1) return 0;  // 如果数组长度小于等于1，说明已经在终点了，不需要跳跃
+        
+        int jumps = 0;  // 跳跃次数
+        int farthest = 0;  // 当前能够跳到的最远位置
+        int end = 0;  // 当前跳跃范围的最远位置
+        
+        for (int i = 0; i < n; i++) {
+            farthest = max(farthest, i + nums[i]);  // 更新当前能到达的最远位置
+            
+            // 如果到达了当前跳跃范围的最远位置，更新跳跃次数和跳跃范围
+            if (i == end) {
+                jumps++;
+                end = farthest;  // 更新当前跳跃范围的最远位置
+                if (end >= n - 1) break;  // 如果已经可以到达终点，提前结束
+            }
+        }
+        
+        return jumps;
+    }
+};
+
+/*
+nums = [2, 3, 1, 1, 4]
+初始值：
+jumps = 0：初始化跳跃次数为 0。
+farthest = 0：初始化最远可达的位置为 0（起始位置）。
+end = 0：当前跳跃的范围的最远位置，初始化为 0。
+过程：
+第 1 步（i = 0）：
+
+当前值：nums[0] = 2，表示从位置 0 可以跳跃最多 2 步。
+更新 farthest = max(farthest, 0 + 2) = 2，表示最远可以跳到的位置是 2。
+此时 i == end，说明我们已经完成了一次跳跃，增加跳跃次数：
+jumps = 1
+更新 end = farthest = 2，当前跳跃的范围是从索引 0 到 2。
+第 2 步（i = 1）：
+
+当前值：nums[1] = 3，表示从位置 1 可以跳跃最多 3 步。
+更新 farthest = max(farthest, 1 + 3) = 4，表示最远可以跳到的位置是 4。
+此时 i != end，所以跳跃次数不变，继续向前遍历。
+第 3 步（i = 2）：
+
+当前值：nums[2] = 1，表示从位置 2 可以跳跃最多 1 步。
+更新 farthest = max(farthest, 2 + 1) = 4，最远位置还是 4。
+此时 i == end，说明我们已经遍历完了当前跳跃范围（从索引 0 到 2），完成了一个跳跃，增加跳跃次数：
+jumps = 2
+更新 end = farthest = 4，当前跳跃的范围是从索引 3 到 4。
+结束条件：
+
+此时，end = 4，已经到达了数组的最后一个位置（end >= nums.size() - 1）。因此，我们可以结束遍历，最终返回跳跃次数。
+*/

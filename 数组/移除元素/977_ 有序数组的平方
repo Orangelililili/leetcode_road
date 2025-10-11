@@ -1,0 +1,30 @@
+https://leetcode.cn/problems/squares-of-a-sorted-array/description/
+
+class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        //遍历一遍，平方和排序同时进行
+        //这个怎么双指针？
+        //由于原队列非递增，因此可知比0小的值，绝对值从大到小排列，比0大的值，绝对值从小到大排列。
+        //只要找到负值与非负值的交界位置，双指针一左一右向两边移动，并把较小值的平方入队列即可。
+        //但是又考虑到这个0不好找
+        //所以可以从外往里找，先找最大的
+        vector<int> result(nums.size()); // 创建一个与输入数组大小相同的结果数组
+        int k=nums.size()-1;//返回数组的最后一个元素
+        //虽然找的是最大的，但是可以反向赋值，这样输出仍旧是由小到大
+        for(int i=0,j=nums.size()-1;i<=j;){
+            //注意语法
+            if(nums[i]*nums[i]>nums[j]*nums[j]){
+                result[k]=nums[i]*nums[i];
+                k--;
+                i++;
+            }else{
+                //这里包含>=
+                result[k]=nums[j]*nums[j];//相等，赋那个值无所谓
+                k--;
+                j--;
+            }
+        }
+        return result;
+    }
+};

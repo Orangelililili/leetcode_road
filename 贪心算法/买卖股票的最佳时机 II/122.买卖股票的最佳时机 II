@@ -1,0 +1,17 @@
+https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/description/
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        //具体的贪心策略是：
+        //每当股价上涨时，我们就卖出股票，这样每次卖出的利润就是两天之间股价的差值。
+        //股价下降时，我们不进行操作，因为不买入股票并保持持有状态可以避免亏损
+        int totalProfit = 0;
+        for (int i = 1; i < prices.size(); i++) {
+            if (prices[i] > prices[i - 1]) {
+                totalProfit += prices[i] - prices[i - 1];
+            }
+        }
+        return totalProfit;
+    }
+};

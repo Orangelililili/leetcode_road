@@ -1,0 +1,47 @@
+https://leetcode.cn/problems/symmetric-tree/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ //对于二叉树是否对称，要比较的是根节点的左子树与右子树是不是相互翻转的，
+ //理解这一点就知道了其实我们要比较的是两个树（这两个树是根节点的左右子树）
+ //迭代法
+ //注意放入栈中数据是先左节点的右，然后右节点的左，然后左节点的左，右节点的右。
+ //这样出栈正好两两比较
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        stack<TreeNode*> st;
+        if(root==nullptr) return true;
+        st.push(root->left);//子树1
+        st.push(root->right);//子树2
+        while(!st.empty()){
+            TreeNode* left=st.top();
+            st.pop();
+            TreeNode* right=st.top();
+            st.pop();
+
+            if(!left &&!right){
+                continue; // 左节点为空、右节点为空，此时说明是对称的
+            }
+
+            if(!left||!right||left->val!=right->val){
+                return false;//左或者右不为空，或者值不一样
+            }
+            
+            st.push(left->right);
+            st.push(right->left);
+            st.push(left->left);
+            st.push(right->right);
+        }
+        return true;
+    }
+};

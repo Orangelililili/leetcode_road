@@ -1,0 +1,46 @@
+https://leetcode.cn/problems/remove-element/description/
+
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        //vector的底层实现还是数组array,数组中元素不能直接删除，只能向前覆盖
+            //遍历找value
+            // if(nums[i]==val){
+            //     nums.erase(i);
+            // }//在遍历 vector 时直接使用 erase 方法会改变 vector 的大小，这会导致迭代器失效，并且可能会导致一些元素没有被检查。
+        //erase是时间复杂度O（n），但是如果暴力枚举，一层循环遍历，一层循环将后面元素向前覆盖，时间复杂度O（n2）
+        //需要移除val的值，但是不需要修改其他的东西，就是说不需要逐个修改元素
+        //这里使用双指针法
+        //将fast定义为新数组中元素，即不等于目标值的元素
+        //将满指针slow定义为新元素下标
+        int slow=0;
+        for(int fast=0;fast<nums.size();fast++){//fast<nums.size()防止空【】数组
+            if(nums[fast]!=val){
+                nums[slow]=nums[fast];
+                slow++;
+            }
+        }
+        return slow;
+    }
+};
+
+//暴力解法
+// 时间复杂度：O(n^2)
+// 空间复杂度：O(1)
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int size = nums.size();
+        for (int i = 0; i < size; i++) {
+            if (nums[i] == val) { // 发现需要移除的元素，就将数组集体向前移动一位
+                for (int j = i + 1; j < size; j++) {
+                    nums[j - 1] = nums[j];
+                }
+                i--; // 因为下标i以后的数值都向前移动了一位，所以i也向前移动一位
+                size--; // 此时数组的大小-1
+            }
+        }
+        return size;
+
+    }
+};

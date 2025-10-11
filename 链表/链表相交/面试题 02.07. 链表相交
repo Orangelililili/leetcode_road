@@ -1,0 +1,68 @@
+https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/description/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        //注意比的是指针是否相同，而不是数值是否相同
+        //示例1就是例子
+        //就是指向下一个节点指针是否相同
+        //因为比的是最后几个节点是否相同，所以要右对齐
+        ListNode* curA=headA;
+        ListNode* curB=headB;
+        //遍历AB个数，为右对齐做准备
+        int lenA=0,lenB=0;
+        //遍历节点数
+        while(curA!=nullptr){
+            lenA++;
+            curA=curA->next;
+        }
+        while(curB!=nullptr){
+            lenB++;
+            curB=curB->next;
+        }
+
+        curA = headA;
+        curB = headB;
+        // 让curA为最长链表的头，lenA为其长度
+        if (lenB > lenA) {
+            swap (lenA, lenB);
+            swap (curA, curB);
+        }
+        int gap=lenA-lenB;
+        while(gap--){//对齐
+            curA=curA->next;
+        }
+
+        while(curA!=nullptr){
+            if(curA==curB){
+                return curA;
+            }
+            curA=curA->next;
+            curB=curB->next;
+        }
+        return nullptr;
+    }
+};
+//nullptr和NULL区别：在C++中，nullptr和NULL都可以用来表示空指针，但它们之间存在一些区别：
+
+// 在C++中，nullptr和NULL都可以用来表示空指针，但它们之间存在一些区别：
+
+// 类型安全性：
+// nullptr是C++11标准中引入的，它是一个关键字，代表空指针常量。它的类型是std::nullptr_t，可以隐式转换为任何指针类型或成员指针类型，但不能转换为整数类型，这提高了类型安全性。
+// NULL在C++中通常定义为整数0，它可以是一个预处理宏。在不同的编译器中，NULL可能被定义为((void*)0)，但仍然可以与整数0互换，这可能导致类型不安全。
+// 重载解析：
+// 当使用nullptr时，函数重载解析会更清晰。例如，如果有两个重载函数，一个接受int参数，另一个接受指针参数，使用nullptr可以明确调用指针版本的函数，而NULL可能会调用整数版本的函数。
+// NULL作为整数0，可能会引起函数重载时的二义性。
+// 一致性：
+// nullptr提供了一种表示所有指针类型空值的统一方式。
+// NULL可能表示整数0，也可能表示空指针，这取决于编译器的定义，因此缺乏一致性。
+// 与C的兼容性：
+// 在C语言中，只有NULL而没有nullptr。因此，如果代码需要在C和C++之间保持兼容性，可能需要使用NULL。

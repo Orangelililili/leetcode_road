@@ -1,0 +1,62 @@
+https://leetcode.cn/problems/reconstruct-itinerary/description/
+
+class Solution {
+private:
+    // unordered_map 用来表示从某个出发机场到达不同目的地的航班次数
+    // targets 是一个映射：从出发机场（string）映射到一个 map，
+    // 这个 map 表示从该出发机场出发到达不同目的机场（key 是到达机场名，value 是航班次数）
+    unordered_map<string, map<string, int>> targets;
+
+    // 回溯函数，ticketNum 是总的航班数量，result 是当前的路径（即航班的顺序）
+    bool backtracking(int ticketNum, vector<string>& result) {
+        // 如果结果路径的长度已经是 ticketNum + 1，说明已经走完了所有的航班
+        if (result.size() == ticketNum + 1) {
+            return true; // 说明已经找到一条合法的路径
+        }
+
+        // 获取当前最后一个机场（即上一个航班的到达机场）
+        // target.first 是到达机场，target.second 是剩余的航班次数
+        for (pair<const string, int>& target : targets[result[result.size() - 1]]) {
+            if (target.second > 0) { // 如果还有航班可以走（即航班次数大于 0）
+                // 将目标机场添加到结果路径中
+                result.push_back(target.first);
+
+                // 该航班已经使用，次数减 1
+                target.second--;
+
+                // 递归调用回溯函数，继续尝试下一个机场
+                if (backtracking(ticketNum, result)) {
+                    return true; // 如果找到一条符合条件的路径，直接返回
+                }
+
+                // 如果没找到符合条件的路径，需要回溯
+                // 恢复之前的状态，撤销这次的选择
+                result.pop_back();
+                target.second++; // 恢复航班次数
+            }
+        }
+
+        return false; // 如果没有找到符合条件的路径，返回 false
+    }
+
+public:
+    // 主要的函数，用来构建航班路径
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        targets.clear(); // 清空之前的目标数据
+        vector<string> result; // 用于保存最终的路径
+
+        // 根据给定的 tickets 构建目标数据结构
+        for (const vector<string>& vec : tickets) {
+            // 构建从出发机场到目的机场的航班次数
+            targets[vec[0]][vec[1]]++; // 从 vec[0] 出发，vec[1] 到达，航班次数加 1
+        }
+
+        // 从 "JFK" 出发，初始化路径
+        result.push_back("JFK");
+
+        // 开始回溯，寻找符合条件的路径
+        backtracking(tickets.size(), result);
+
+        return result; // 返回结果路径
+    }
+};

@@ -1,0 +1,89 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+//写leetcode要包含头文件，但是不用包含main函数实例，后台会自己调用
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        for (int i=0; i < nums.size(); i++) {
+            if (nums[i] == target)
+                return i;
+        }
+        return -1;
+    }
+};
+
+//https://leetcode.cn/problems/binary-search/description/
+
+
+
+/*
+int main(void) {
+    vector<int> nums;
+    int number;
+    while(cin>>number){
+        nums.push_back(number);//不知道要输入的数据多少，使用push_back将数据压到vector中
+    }
+    int target;
+    cin>>target;
+    Solution sl;//创建一个类实例
+    cout<<sl.search(nums,target);
+    return 0;
+}*/
+
+/*
+二分查找
+在升序数组 nums 中寻找目标值 target，对于特定下标 i，比较 nums[i] 和 target 的大小：
+
+如果 nums[i]=target，则下标 i 即为要寻找的下标；
+
+如果 nums[i]>target，则 target 只可能在下标 i 的左侧；
+
+如果 nums[i]<target，则 target 只可能在下标 i 的右侧。
+
+基于上述事实，可以在有序数组中使用二分查找寻找目标值。
+
+二分查找的做法是，定义查找的范围 [left,right]，初始查找范围是整个数组。每次取查找范围的中点 mid，比较 nums[mid] 和 target 的大小，如果相等则 mid 即为要寻找的下标，如果不相等则根据 nums[mid] 和 target 的大小关系将查找范围缩小一半。
+
+由于每次查找都会将查找范围缩小一半，因此二分查找的时间复杂度是 O(logn)，其中 n 是数组的长度。
+
+二分查找的条件是查找范围不为空，即 left≤right。如果 target 在数组中，二分查找可以保证找到 target，返回 target 在数组中的下标。如果 target 不在数组中，则当 left>right 时结束查找，返回 −1。
+*/
+//官方：
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int left = 0, right = nums.size() - 1;
+        while(left <= right){
+            int mid = (right - left) / 2 + left;
+            int num = nums[mid];
+            if (num == target) {
+                return mid;//找到了
+            } else if (num > target) {
+                right = mid - 1;//说明在左半边
+            } else {
+                left = mid + 1;//说明在右半边，更新left
+            }
+        }
+        return -1;//没找到
+    }
+};
+
+
+/*
+数组是存放在连续内存空间上的相同类型数据的集合。
+数组下标都是从0开始的。
+数组内存空间的地址是连续的
+数组的元素是不能删的，只能覆盖。
+void removeElement(int arr[], int &size, int index) {
+    if (index < 0 || index >= size) {
+        return; // 索引无效
+    }
+    for (int i = index; i < size - 1; ++i) {
+        arr[i] = arr[i + 1]; // 将后续元素前移
+    }
+    size--; // 减少数组大小
+}
+以C++为例，在C++中二维数组是连续分布的。
+*/

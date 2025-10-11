@@ -1,0 +1,60 @@
+https://leetcode.cn/problems/top-k-frequent-elements/description/
+
+//堆是一棵完全二叉树，树中每个结点的值都不小于（或不大于）其左右孩子的值。
+// 如果父亲结点是大于等于左右孩子就是大顶堆，小于等于左右孩子就是小顶堆。
+class Solution {
+public:
+// 小顶堆
+    class mycomparison {
+    public:
+    // 重载 () 操作符，实现自定义比较规则
+        bool operator()(const pair<int, int>& lhs, const pair<int, int>& rhs) {
+            // C++ 标准库中的 std::pair 模板类的一个具体化，表示一个包含两个整数元素的对。
+            //它是一个模板类，可以存储两个不同类型的值，将这两个值组合成一个对象。这在处理两个关联数据（如键值对）时非常有用
+            return lhs.second > rhs.second;
+        }
+    };
+
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // 要统计元素出现频率
+        unordered_map<int, int> map; // map<nums[i],对应出现的次数>
+        for (int i = 0; i < nums.size(); i++) {
+            map[nums[i]]++;
+        }
+
+        // 对频率排序
+        // 定义一个小顶堆，大小为k
+        priority_queue<pair<int, int>, vector<pair<int, int>>, mycomparison> pri_que;//该优先队列会使用 mycomparison 比较器
+                //按照pair<int, int> 的 second 值排序，second 值越小优先级越高（最小堆）。
+        /**
+容器类型 priority_queue：
+priority_queue 是 C++ 标准库中的一种容器适配器，用于实现优先队列。
+优先队列是一种特殊的队列数据结构，元素总是按照优先级顺序排序，默认是一个最大堆（即元素会从大到小排序）。
+元素类型 pair<int, int>：
+priority_queue<pair<int, int>> 表示该优先队列的元素类型为 std::pair<int, int>。
+这意味着每个元素都是一个包含两个整数的 pair，分别可以通过 first 和 second 成员访问。
+底层容器 vector<pair<int, int>>：
+priority_queue 使用 vector 作为默认的底层容器，这里明确指定了底层容器 vector<pair<int, int>>。
+优先队列内部会对 vector 进行堆排序，以实现元素按优先级顺序排列。
+比较器 mycomparison：
+mycomparison 是一个自定义的比较类，它重载了 operator()，定义了 pair<int, int> 类型元素的比较规则，用于决定优先队列中的元素顺序。
+比如，如果 mycomparison 中定义为 lhs.second > rhs.second，则优先队列会按照 second 值从小到大的顺序排列 pair<int, int> 元素，
+形成一个最小堆（second 值最小的元素会排在队首）
+        **/
+        // 用固定大小为k的小顶堆，扫面所有频率的数值
+        for (unordered_map<int, int>::iterator it = map.begin(); it != map.end(); it++) {//迭代器
+            pri_que.push(*it);
+            if (pri_que.size() > k) { // 如果堆的大小大于了K，则队列弹出，保证堆的大小一直为k
+                pri_que.pop();
+            }
+        }
+
+        // 找出前K个高频元素，因为小顶堆先弹出的是最小的，所以倒序来输出到数组
+        vector<int> result(k);
+        for (int i = k - 1; i >= 0; i--) {
+            result[i] = pri_que.top().first;
+            pri_que.pop();
+        }
+        return result;
+    }
+};

@@ -1,0 +1,26 @@
+https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/
+
+class Solution {
+public:
+    int findMinArrowShots(vector<vector<int>>& points) {
+        if (points.empty()) return 0;
+
+        // 按区间的结束位置排序
+        sort(points.begin(), points.end(), [](const vector<int>& a, const vector<int>& b) {//自定义的比较函数或比较规则，用于定义排序顺序。
+            return a[1] < b[1];
+        });
+
+        int arrows = 1;  // 至少需要一支箭
+        int end = points[0][1];  // 第一个区间的结束点
+
+        for (int i = 1; i < points.size(); i++) {
+            // 如果当前区间的起点大于前一个区间的结束点，说明需要一支新的箭
+            if (points[i][0] > end) {
+                arrows++;
+                end = points[i][1];  // 更新箭的作用区间
+            }
+        }
+
+        return arrows;
+    }
+};

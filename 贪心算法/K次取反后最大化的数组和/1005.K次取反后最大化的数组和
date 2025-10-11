@@ -1,0 +1,36 @@
+https://leetcode.cn/problems/maximize-sum-of-array-after-k-negations/
+
+class Solution {
+public:
+    int largestSumAfterKNegations(vector<int>& nums, int k) {
+        // 1. 排序，优先操作最小的负数
+        sort(nums.begin(), nums.end());
+
+        // 2. 尽量将负数反转成正数
+        for (int i = 0; i < nums.size() && k > 0; i++) {
+            if (nums[i] < 0) {
+                nums[i] = -nums[i];
+                k--;
+            }
+        }
+
+        // 3. 如果还剩下奇数次操作，则反转最小值
+        if (k % 2 != 0) {
+            // 排序后最小的数会在数组的第一个位置
+            sort(nums.begin(), nums.end());
+            nums[0] = -nums[0];
+        }
+
+        // 4. 计算并返回数组和
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        return sum;
+    }
+};
+/*
+将数组排序，这样最小的负数会排在数组的前面，便于处理。
+逐个反转负数，每次选择最小的负数进行反转。
+处理剩余的操作：如果还剩下操作，且剩余的操作次数是奇数，则反转数组中的最小值。
+*/

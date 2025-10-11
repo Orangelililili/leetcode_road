@@ -1,0 +1,33 @@
+https://kamacoder.com/problempage.php?pid=1070
+
+//对于处理大量数据的情况，scanf和printf通常会比cin和cout更快，
+//因为cin和cout涉及到更多的开销，比如类型检查和缓冲区管理。
+//scanf和printf是C标准库中的函数，它们直接操作C语言中的I/O流，因此通常具有更高的性能。
+
+#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    int n, a, b;
+    cin >> n;
+    vector<int> vec(n);//输入数组
+    vector<int> p(n);//前i个数据和，每次查询这个会快很多
+    int presum = 0;
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &vec[i]);
+        presum += vec[i];//不能直接操作数组的值，加个temp
+        p[i] = presum;
+    }
+
+    while (~scanf("%d%d", &a, &b)) {
+        //当 scanf 成功读取两个整数时，它返回 2。对这个返回值取反（~2），
+        //结果是一个负数，但不是 -1，因此循环继续。
+        //当 scanf 遇到输入结束（例如文件结束或遇到无效输入），
+        //它返回 EOF，通常是 -1。对这个返回值取反（~-1），结果是 0。在 C 语言中，
+        //0 被视为假，所以 while 循环终止。
+        int sum;
+        if (a == 0) sum = p[b];
+        else sum = p[b] - p[a - 1];
+        printf("%d\n", sum);
+    }
+}

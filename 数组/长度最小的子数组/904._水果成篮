@@ -1,0 +1,30 @@
+https://leetcode.cn/problems/fruit-into-baskets/description/
+
+
+//学了哈希表再来
+
+class Solution {
+public:
+    int totalFruit(vector<int>& fruits) {
+        //这个水果种类 fruits[i]=3就代表第i棵树上水果种类为3
+        //滑动窗口
+        //输出为最大窗口大小
+        int len=2;//再小也有两棵树
+        int j=0;//起始树
+        for(int i=1;i<fruits.size();i++){
+            //设置i为终止树
+            //向左查找第二个不与它相等的树，差值就是滑动窗口大小
+            while(){
+                if(fruits[i]!=fruits[j]){
+                    //再有新种类就结束
+                    len=i-j;
+                    break;
+                }
+                if()
+                
+            }
+
+        }
+        return len;
+    }
+};
